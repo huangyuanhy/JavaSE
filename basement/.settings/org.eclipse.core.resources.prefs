@@ -1,0 +1,5 @@
+eclipse.preferences.version=1
+encoding//src/redis=GBK
+encoding//src/redis/Redis.java=GBK
+encoding//src/test/TreeMapTest.java=UTF-8
+encoding/<project>=UTF-8

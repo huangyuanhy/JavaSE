@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"        
+    xmlns:mvc="http://www.springframework.org/schema/mvc"     
+    xmlns:tx="http://www.springframework.org/schema/tx"  
+    xmlns:aop="http://www.springframework.org/schema/aop"  
+    xmlns:context="http://www.springframework.org/schema/context"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"              
+    xsi:schemaLocation="                                               
+            http://www.springframework.org/schema/beans    
+            http://www.springframework.org/schema/beans/spring-beans.xsd    
+            http://www.springframework.org/schema/context     
+            http://www.springframework.org/schema/context/spring-context.xsd    
+            http://www.springframework.org/schema/mvc    
+            http://www.springframework.org/schema/mvc/spring-mvc.xsd  
+            http://www.springframework.org/schema/tx   
+            http://www.springframework.org/schema/tx/spring-tx.xsd  
+            http://www.springframework.org/schema/aop  
+            http://www.springframework.org/schema/aop/spring-aop.xsd "  
+    default-autowire="byName">
+
+<!-- 下面是aop的注解实现 -->
+	<!-- 开启aop扫描 -->
+	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+	<bean id="book2" class="aop.annotion.Book"></bean>
+	<bean id="mybook2" class="aop.annotion.Mybook"></bean>
+
+	<!-- 下面是aop的配置实现 -->
+	<bean id="book" class="aop.Book"></bean>
+	<bean id="mybook" class="aop.Mybook"></bean>
+	<aop:config>
+		<!-- 配置切入点 -->
+		 <aop:pointcut expression="execution(* aop.Book.*(..))" id="pointcut1"/>
+		<!-- 切面 -->
+		<aop:aspect ref="mybook">
+			<!-- <aop:before method="before1" pointcut-ref="pointcut1"/>
+			<aop:after-returning method="after1" pointcut-ref="pointcut1"/> -->
+			
+			<!-- 环绕通知 -->
+			<aop:around method="around1" pointcut-ref="pointcut1"/>
+		</aop:aspect>
+	</aop:config>
+    
+    <!-- 下面三个bean是注解方式实现 -->
+    <bean id="bookdao" class="ioc.annotation.BookDAo"> </bean>
+    <bean id="orderdao" class="ioc.annotation.OrderDao"> </bean>
+    <bean id="service" class="ioc.annotation.Service"> </bean>
+    
+    <!-- 开启注解扫描 -->
+       <context:component-scan base-package="ioc"></context:component-scan>
+    <bean id="user" class="ioc.User"> </bean>
+    
+    <!-- 复杂属性的注入 -->
+     <bean id="prop" class="ioc.PropertyTest">
+		<property name="arr">
+			<list>
+				<value>huanguyan</value>
+				<value>guowenjing</value>
+				<value>liuwenzhao</value>
+			</list>
+		</property>
+
+		<property name="list">
+			<list>
+				<value>黄牙U呢</value>
+				<value>发撒旦法</value>
+				<value>而我认为</value>
+			</list>
+		</property>
+		<property name="map">
+			<map>
+				<entry key="aa" value="lucy"></entry>
+				<entry key="bb" value="mike"></entry>
+				<entry key="cc" value="tom"></entry>
+			</map>
+		</property>
+		
+		<property name="prop">
+			<props>
+				<prop key="driverClass">com.mysql.jdbc.driver</prop>
+				<prop key="root">root</prop>
+			</props>
+		</property>
+    </bean>
+</beans>
