@@ -2,8 +2,10 @@ package java8;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 
@@ -23,10 +25,13 @@ public class PredicateTest {
 		books.add("鸟哥的私房菜Linux大全");
 		books.add("xml必学知识点汇总");
 		
-		books.removeIf(ele ->ele.length()<8);
-		System.out.println(books);
-		System.out.println(callAll(books,ele->ele.contains("Java")));
-		System.out.println(callAll(books,ele->ele.length()>10));
+//		books.removeIf(ele ->ele.length()<8);
+//		System.out.println(books);
+//		System.out.println(callAll(books,ele->ele.contains("Java")));
+//		System.out.println(callAll(books,ele->ele.length()>10));
+		
+		Set<String>  collect = books.stream().map(book->book.concat("-----")).collect(Collectors.toSet());
+		System.out.println(collect);
 	}
 
 	private int callAll(Collection<String> books,Predicate<String> predicate) {
@@ -39,3 +44,6 @@ public class PredicateTest {
 		return total;
 	}
 }
+
+
+
