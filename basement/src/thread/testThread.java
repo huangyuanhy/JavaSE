@@ -14,31 +14,27 @@ public class testThread {
 		
 		test1();
 	}
-	
-	
-	
-	
 	public static synchronized void test() {
 		for(int i=0;i<20;i++) {
 			number++;
-			System.out.println(number);
-			try {
-			Thread.sleep(200);
-				
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
+			System.out.println(Thread.currentThread().getName()+number);
+//			try {
+//			Thread.sleep(200);
+//				
+//			} catch (Exception e) {
+//				// TODO: handle exception
+//			}
 		}
 	}
 	
 	public static synchronized void test1() {
 		Thread threadA=new Thread(()-> {
 			test();
-		});
+		},"test");
 		threadA.start();
 		for(int i=0;i<20;i++) {
 			number--;
-			System.out.println(number);
+			System.out.println(Thread.currentThread().getName()+number);
 
 		}
 	}
