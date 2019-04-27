@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/java8/PredicateTest.java=UTF-8
 encoding//src/redis=GBK
 encoding//src/redis/Redis.java=GBK
 encoding//src/test/TreeMapTest.java=UTF-8
