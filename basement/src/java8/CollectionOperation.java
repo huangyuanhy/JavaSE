@@ -13,6 +13,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.LongSummaryStatistics;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -34,12 +35,20 @@ public class  CollectionOperation {
 		//filterList(persons);
 		//sortList(persons);
 		//groupByKey();
-		mapDefinition(persons);
+		System.out.println(mapDefinition(persons));
+		System.out.println(generateMap(persons));
+		System.out.println(testJoin(persons));
 	}
-	//根据对象不同的属性生成map
-	public static void mapDefinition(List<Person> persons) {
+	// 多级分组 先按id分组 再按年龄分组
+	public static void testGroup(List<Person> persons) {
+		Map<String, Map<Long, List<Person>>> collect = persons.stream()
+				.collect(Collectors.groupingBy(Person::getId,Collectors.groupingBy(Person::getAge)));
+	}
+	//根据对象不同的属性生成map{key=id ,value=age}
+	public static Map<String, Long> mapDefinition(List<Person> persons) {
 		Collector<Person, ?, Long> ageCount = Collectors.summingLong(Person::getAge);
 		Map<String, Long> defPerson = persons.stream().collect(Collectors.groupingBy(Person::getId,ageCount));//第二个参数必须是个流式集合
+		return defPerson;
 	}
 	//遍历list集合
 	public static void iteratList(List<Person> persons) {
@@ -59,21 +68,39 @@ public class  CollectionOperation {
 		List<Person> ageList = persons.stream().filter(person->person.getAge()<=20).collect(Collectors.toList());
 		System.out.println(ageList.size());
 	}
-	
+
 	//生成新的map集合
-	public static void generateMap(List<Person> persons){
+	public static Map<String, Long> generateMap(List<Person> persons){
 		Map<String, Long> newMap = persons.stream().collect(Collectors.toMap(Person::getId, Person::getAge));
+		return newMap ;
 	}
-	
-	
+	//分区 两个区 满足条件及不满足的 返回map
+	public static Map<Boolean, List<Person>> generateMap2(List<Person> persons){
+		Map<Boolean, List<Person>> collect = persons.stream().collect(Collectors.partitioningBy(e->e.getAge()>3));
+		return collect ;
+	}
+	//连接
+	public static String testJoin(List<Person> persons){
+		return persons.stream().map(Person::getName).collect(Collectors.joining(","));
+	}
+	// 统计属性 平均值  最大值  总和等 支持Long Double int三种数字型
+	public void cummunicate(List<Person> persons) {
+		LongSummaryStatistics collect = persons.stream().collect(Collectors.summarizingLong(Person::getAge));
+		System.out.println(collect.getAverage());
+		System.out.println(collect.getSum());
+	}
+
+
 	//排序
 	public static void sortList(List<Person> persons) {
 		//原来的方法
 		//Collections.sort(persons, (o1,o2)->o1.getAge()-o2.getAge());
 		//persons.stream().sorted((o1,o2)->o1.getAge()-o2.getAge());
-		 Set<Person> collect = persons.stream().sorted(Comparator.comparingLong(Person::getAge)).collect(Collectors.toSet());
-		 collect.forEach(p->System.out.println(p.getAge()));
-		
+		Set<Person> collect = persons.stream()
+				.sorted(Comparator.comparingLong(Person::getAge))
+				.collect(Collectors.toSet());
+		collect.forEach(p->System.out.println(p.getAge()));
+
 	}
 
 	//根据list 集合中的对象属性-id 生成新的集合
@@ -95,7 +122,7 @@ public class  CollectionOperation {
 		Set<String> idsSet = persons.stream().map(Person::getId).collect(Collectors.toSet());
 		System.out.println("根据person的id生成的set集合"+idsList_1);
 	}
-	
+
 	//根据集合里的属性进行分组，生成map集合
 	public static void groupByKey() {
 		List<Person> list = getList();
@@ -111,8 +138,8 @@ public class  CollectionOperation {
 			System.out.println();
 		});
 	}
-	
-	
+
+
 	public static Map<String, List<Person>> getMap() {
 		List<Person> persons = getList();
 		Map<String, List<Person>> personsMap=new HashMap<String, List<Person>>();
