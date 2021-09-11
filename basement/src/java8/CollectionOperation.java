@@ -1,12 +1,4 @@
-/**  
- * <p>Title: ConlectionOperations.java</p>  
- * <p>Description: </p>  
- * <p>Copyright: Copyright (c) 2019</p>  
- * <p>Company: www.360.net</p>  
- * @author huangyuan  
- * @date 2019年3月5日  
- * @version 1.0  
- */  
+
 package java8;
 
 import java.util.Comparator;
